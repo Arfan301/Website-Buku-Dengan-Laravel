@@ -30,6 +30,16 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
 
+        <!-- Add New Book Section -->
+        <div class="col-md-4 d-flex mb-4 mt-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Tambah Buku</h5>
+                    <a href="{{ route('buku.create') }}" class="btn btn-primary" style="min-width: 100%">Add New Book</a>
+                </div>
+            </div>
+        </div>
+
         <!-- Books Section -->
         @if($books->isEmpty())
             <p class="text-muted">No books found matching your search criteria.</p>
@@ -59,17 +69,45 @@
                     </div>
                 @endforeach
             </div>
-        @endif
 
-        <!-- Add New Book Section -->
-        <div class="col-md-4 d-flex">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Tambah Buku</h5>
-                    <a href="{{ route('buku.create') }}" class="btn btn-primary" style="min-width: 100%">Add New Book</a>
-                </div>
+            <!-- Pagination Links -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <!-- Previous Page Link -->
+                        @if($books->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $books->previousPageUrl() }}" aria-label="Previous">Previous</a>
+                            </li>
+                        @endif
+
+                        <!-- Page Numbers -->
+                        @foreach ($books->links()->elements[0] as $page => $url)
+                            @if ($page == $books->currentPage())
+                                <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                            @else
+                                <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                            @endif
+                        @endforeach
+
+                        <!-- Next Page Link -->
+                        @if($books->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $books->nextPageUrl() }}" aria-label="Next">Next</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
             </div>
-        </div>
+        @endif
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

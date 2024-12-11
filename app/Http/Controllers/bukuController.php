@@ -9,7 +9,7 @@ class bukuController extends Controller
 {
     public function index()
     {
-        $books = Buku::all();
+        $books = Buku::paginate(5);
         return view('main', compact('books'));
     }
 
@@ -77,7 +77,10 @@ class bukuController extends Controller
         $books = Buku::where('judul', 'like', '%' . $query . '%')
                     ->orWhere('pengarang', 'like', '%' . $query . '%')
                     ->orWhere('tahun', 'like', '%' . $query . '%')
-                    ->get();
+                    ->paginate(10); // Use paginate instead of get()
+
+        // Preserve the search query in the pagination links
+        $books->appends(['query' => $query]);
 
         return view('main', compact('books'))->with('success', "Results for '$query'");
     }
